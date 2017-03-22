@@ -1,0 +1,155 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, minimum-scale=0.1">
+    <title>海报</title>
+    <link rel="stylesheet" href="css/index.css">
+    <style>
+    body{
+      background-color:#EEE8CD;
+    }
+    .container{
+      
+    }
+    img{
+      width:100%;
+      height:100%;
+      display:block;
+    }
+    .page1{
+        width:100%;
+        height:100%;
+        background-image:url("images/bg1.jpg");
+        position: relative;
+    }
+    .bg-input{
+        width:14em;
+        height:4em;
+        background-image:url("images/bg-input.png");
+    }
+    ::-webkit-input-placeholder {
+        color: #f1dbc8;
+    }
+    input{
+        width:80%;
+        display:block;
+        height:2rem;
+        border:none;
+        outline: none;
+        text-align: center;
+        background:rgba(0,0,0,0);
+        color: #f1dbc8;
+    }
+    .button{
+        width:8.44em;
+        height:8em;
+        margin-top:2em;
+    }
+    .button img{
+        width:100%;
+    }
+    </style>
+</head>
+<body class="box box-ver">
+    <!-- <canvas id="poster"></canvas> -->
+    <div class="page1 bc-img box box-ver box-ac box-pc">
+        <div class="box-f1 box"></div>
+        <div class="bg-input box box-ac box-pc bc-img">
+            <input id="name" type="text" placeholder="输入姓名&nbsp;&nbsp;&nbsp;&nbsp;参与接力" />
+        </div>
+        <a class="button box" href="javascript:0">
+            <img src="images/btn.png" alt="">
+        </a>
+        <div style="height:12%"></div>
+    </div>
+    <div class="container box box-fh box-fv hide">
+      
+    </div>
+    <div class="toast hide"></div>
+    <script src="js/concat.js"></script>
+</body>
+<script>
+    /*
+    var c = document.getElementById('poster');
+    var cw = document.body.offsetWidth;
+    var ch = document.body.offsetHeight;
+    c.width = cw;
+    c.height = ch;
+    var ctx = c.getContext("2d");
+    var imgBg = new Image();
+    imgBg.src = 'images/bg.jpg';
+    imgBg.onload = function(){
+      var bgW = imgBg.width;
+      var bgH = imgBg.height;
+      ctx.drawImage(imgBg,0,0,bgW,bgH,0,0,cw,ch);
+      var head = new Image();
+      head.src = 'images/code.jpg';
+      var headW = head.width;
+      var headH = head.height;
+      head.onload = function(){
+        ctx.drawImage(head,0,0,headW,headH,Math.floor(cw/10),Math.floor(ch/10*8),Math.floor(cw/10),Math.floor(cw/10));
+      }
+    }
+    */
+    function closeToast(){
+        $('.toast').addClass('hide');
+    }
+    function openToast(msg,time){
+      $('.toast').html(msg).removeClass('hide');
+      if(time){
+          setTimeout(function(){
+              closeToast();
+          },time)
+      }
+    }
+    /**
+     * 链接后面的参数
+     */
+    function getQueryString(name) {
+        var reg = new RegExp("(^|&)" + name + "=([^&]*)(&|$)", "i");
+        var r = window.location.search.substr(1).match(reg);
+        if (r != null) return unescape(r[2]); return null;
+    }
+    
+    $('.button').on('click',function(){
+      var name = $('#name').val();
+      if(name.length<1){
+          openToast('请先填写姓名',2000);
+      }else{
+          getUserInfo(name);
+      }
+    })
+    var is_signins = 0;
+    function getUserInfo(name){
+        openToast('海报生成中');
+        var code = getQueryString('code');
+        if(!code){
+          openToast('微信授权失败，请重新进入',2000);
+          return false;
+        }
+        //alert(code);
+        $.ajax({
+            type: 'GET',
+            url: 'http://text.dmooo.xyz/poster/get_img?code='+code+'&activity_id=1&realname='+name,
+            dataType: 'json',
+            timeout: 10000,
+            success: function(data){
+              //alert(JSON.stringify(data));
+              if(data.status == 1){
+                  closeToast();
+                  var img_poster = data.data.poster.img;
+
+                  $('.page1').addClass('hide');
+                  $('.container').html('<img src="'+img_poster+'" alt="">').removeClass('hide');
+              }else{
+                openToast(data.message,2000);
+              }
+            },
+            error: function(xhr, type){
+                openToast('网络故障',2000);
+            }
+        })
+    }
+</script>
+</html>

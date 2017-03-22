@@ -1,0 +1,13 @@
+*{
+	margin:0;
+	padding:0;
+}
+.box{display: -webkit-box !important;display: box !important;position:relative;}
+.box-fh{width:100%;} .box-fv{height:100%;}
+.box-f1{position:relative;-webkit-box-flex: 1;box-flex: 1;}
+.box-ac{-webkit-box-align:center;box-align:center;}
+.box-pc{-webkit-box-pack:center;box-pack:center;}
+.box-ver{-webkit-box-orient:vertical;box-orient:vertical;}
+.box-rev {-webkit-box-direction:reverse;box-direction:reverse;}
+.bc-img{-webkit-background-size:100% 100%;background-size:100% 100%;background-repeat:no-repeat;background-position:center;}
+.hide{display: none !important;}

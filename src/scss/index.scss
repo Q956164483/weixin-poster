@@ -1,0 +1,19 @@
+@import "reset";
+@import "mixins";
+@import "box";
+html,body,.container{
+	width:100%;
+	height:100%;
+}
+.toast{
+  position: fixed;
+  padding:.8rem;
+  border-radius:.2rem;
+  background-color: rgba(0,0,0,0.8);
+  color:#FFF;
+  top:45%;
+  left:50%;
+  z-index: 888;
+  font-size: 1.2rem;
+  @include transform(translateX(-50%));
+}
